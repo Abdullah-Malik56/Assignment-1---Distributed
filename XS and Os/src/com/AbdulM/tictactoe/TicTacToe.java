@@ -1,7 +1,9 @@
 //Abdullah Malik, 100698109
 
+// Package containing pictures for board and pieces
 package com.AbdulM.tictactoe;
 
+// importing all neede libraries for network, game board, and logic features
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,11 +22,11 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+// Main method, creates windows
 public class TicTacToe implements Runnable {
 
 	// Created Server variables
@@ -86,7 +88,7 @@ public class TicTacToe implements Runnable {
 		{	
 			port = scanner.nextInt();
 		}
-
+		// method for PNGs
 		loadImages();
 
 		painter = new Painter();
@@ -94,6 +96,7 @@ public class TicTacToe implements Runnable {
 
 		if (!connect()) initializeServer();
 
+		// specifications set for window
 		frame = new JFrame();
 		frame.setTitle("Xs and Os!!!!");
 		frame.setContentPane(painter);
@@ -102,6 +105,7 @@ public class TicTacToe implements Runnable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
+		// Allows simoultaneous running of all parts
 		thread = new Thread(this, "TicTacToe");
 		thread.start();
 	}
@@ -124,8 +128,6 @@ public class TicTacToe implements Runnable {
 	private void render(Graphics g) 
 	{
 		g.drawImage(board, 0, 0, null);
-		
-
 		if (accepted) 
 		{
 			for (int i = 0; i < spaces.length; i++) 
@@ -134,34 +136,37 @@ public class TicTacToe implements Runnable {
 				{
 					if (spaces[i].equals("X"))
 					{
+						// For client
 						if (circle) 
 						{
 							g.drawImage(X, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
 						} 
 						else 
 						{
+						// For server
 							g.drawImage(X, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
 						}
 					} 
 					else if (spaces[i].equals("O")) 
 					{
 						if (circle) 
+						// For client
 						{
 							g.drawImage(O, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
 						} 
 						else 
 						{
+						// For server
 							g.drawImage(O, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
 						}
 					}
 				}
 			}
+			// Handles game text on all conditions
 			if (won || enemyWon) {
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setStroke(new BasicStroke(10));
-				
 				g.setColor(Color.GREEN);
-				g.setFont(largerFont);
 				if (won) 
 				{
 					int stringWidth = g2.getFontMetrics().stringWidth(wonString);
@@ -177,14 +182,12 @@ public class TicTacToe implements Runnable {
 			{
 				Graphics2D g2 = (Graphics2D) g;
 				g.setColor(Color.GRAY);
-				g.setFont(largerFont);
 				int stringWidth = g2.getFontMetrics().stringWidth(tieString);
 				g.drawString(tieString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
 			}
 		} 
 		else 
 		{
-			g.setFont(font);
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
@@ -272,7 +275,7 @@ public class TicTacToe implements Runnable {
 		}
 	}
 
-
+	// instantiates socket
 	private boolean connect() 
 	{
 		try {
@@ -287,7 +290,8 @@ public class TicTacToe implements Runnable {
 		}
 		return true;
 	}
-	
+
+	// Socket endpoint
 	private void listenForServerRequest()
 	{
 		Socket socket = null;
@@ -331,7 +335,7 @@ public class TicTacToe implements Runnable {
 		yourTurn = true;
 		circle = false;
 
-	
+	// Function to handle mouse inputs
 	@SuppressWarnings("unused")
 	public static void main(String[] args) 
 	{
