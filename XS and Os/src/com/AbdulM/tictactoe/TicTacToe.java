@@ -56,7 +56,6 @@ public class TicTacToe implements Runnable {
 	private boolean yourTurn = false;
 	private boolean circle = true;
 	private boolean accepted = false;
-	private boolean unableToCommunicateWithOpponent = false;
 	private boolean won = false;
 	private boolean enemyWon = false;
 	private boolean tie = false;
@@ -77,13 +76,14 @@ public class TicTacToe implements Runnable {
 	private int[][] wins = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
 
 	// Main method (asks for IP and Port number)
-	public TicTacToe() {
+	public TicTacToe() 
+	{
 		System.out.println("What is your IP? ");
 		ip = scanner.nextLine();
 		System.out.println("What is your port number? ");
 		port = scanner.nextInt();
-		while (port < 1 || port > 3000) {
-			
+		while (port < 1 || port > 3000) 
+		{	
 			port = scanner.nextInt();
 		}
 
@@ -106,36 +106,51 @@ public class TicTacToe implements Runnable {
 		thread.start();
 	}
 
-	public void run() {
-		while (true) {
+	public void run() 
+	{
+		while (true) 
+		{
 			tick();
 			painter.repaint();
 
-			if (!circle && !accepted) {
+			if (!circle && !accepted) 
+			{
 				listenForServerRequest();
 			}
-
 		}
 	}
 
 	// function to render game board, pieces, game text
-	private void render(Graphics g) {
+	private void render(Graphics g) 
+	{
 		g.drawImage(board, 0, 0, null);
 		
 
-		if (accepted) {
-			for (int i = 0; i < spaces.length; i++) {
-				if (spaces[i] != null) {
-					if (spaces[i].equals("X")) {
-						if (circle) {
+		if (accepted) 
+		{
+			for (int i = 0; i < spaces.length; i++) 
+			{
+				if (spaces[i] != null) 
+				{
+					if (spaces[i].equals("X"))
+					{
+						if (circle) 
+						{
 							g.drawImage(X, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
-						} else {
+						} 
+						else 
+						{
 							g.drawImage(X, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
 						}
-					} else if (spaces[i].equals("O")) {
-						if (circle) {
+					} 
+					else if (spaces[i].equals("O")) 
+					{
+						if (circle) 
+						{
 							g.drawImage(O, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
-						} else {
+						} 
+						else 
+						{
 							g.drawImage(O, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
 						}
 					}
@@ -147,41 +162,51 @@ public class TicTacToe implements Runnable {
 				
 				g.setColor(Color.GREEN);
 				g.setFont(largerFont);
-				if (won) {
+				if (won) 
+				{
 					int stringWidth = g2.getFontMetrics().stringWidth(wonString);
 					g.drawString(wonString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
-				} else if (enemyWon) {
+				} 
+				else if (enemyWon) 
+				{
 					int stringWidth = g2.getFontMetrics().stringWidth(enemyWonString);
 					g.drawString(enemyWonString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
 				}
 			}
-			if (tie) {
+			if (tie) 
+			{
 				Graphics2D g2 = (Graphics2D) g;
 				g.setColor(Color.GRAY);
 				g.setFont(largerFont);
 				int stringWidth = g2.getFontMetrics().stringWidth(tieString);
 				g.drawString(tieString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
 			}
-		} else {
+		} 
+		else 
+		{
 			g.setFont(font);
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
-
 	}
 
 	// Handler of game and server logic
-	private void tick() {
+	private void tick() 
+	{
 		if (errors >= 10) unableToCommunicateWithOpponent = true;
-		if (!yourTurn && !unableToCommunicateWithOpponent) {
-			try {
+		if (!yourTurn && !unableToCommunicateWithOpponent) 
+		{
+			try 
+				{
 				int space = dis.readInt();
 				if (circle) spaces[space] = "X";
 				else spaces[space] = "O";
 				checkForEnemyWin();
 				checkForTie();
 				yourTurn = true;
-			} catch (IOException e) {
+			} 
+			catch (IOException e) 
+			{
 				e.printStackTrace();
 				errors++;
 			}
@@ -189,24 +214,32 @@ public class TicTacToe implements Runnable {
 	}
 
 	private void checkForTie() {
-		for (int i = 0; i < spaces.length; i++) {
-			if (spaces[i] == null) {
+		for (int i = 0; i < spaces.length; i++) 
+		{
+			if (spaces[i] == null) 
+			{
 				return;
 			}
 		}
 		tie = true;
 	}
 
-	private void checkForWin() {
-		for (int i = 0; i < wins.length; i++) {
+	private void checkForWin() 
+	{
+		for (int i = 0; i < wins.length; i++) 
+		{
 			if (circle) {
-				if (spaces[wins[i][0]] == "O" && spaces[wins[i][1]] == "O" && spaces[wins[i][2]] == "O") {
+				if (spaces[wins[i][0]] == "O" && spaces[wins[i][1]] == "O" && spaces[wins[i][2]] == "O") 
+				{
 					firstSpot = wins[i][0];
 					secondSpot = wins[i][2];
 					won = true;
 				}
-			} else {
-				if (spaces[wins[i][0]] == "X" && spaces[wins[i][1]] == "X" && spaces[wins[i][2]] == "X") {
+			} 
+			else 
+			{
+				if (spaces[wins[i][0]] == "X" && spaces[wins[i][1]] == "X" && spaces[wins[i][2]] == "X") 
+				{
 					firstSpot = wins[i][0];
 					secondSpot = wins[i][2];
 					won = true;
@@ -215,16 +248,22 @@ public class TicTacToe implements Runnable {
 		}
 	}
 
-	private void checkForEnemyWin() {
-		for (int i = 0; i < wins.length; i++) {
+	private void checkForEnemyWin() 
+	{
+		for (int i = 0; i < wins.length; i++) 
+		{
 			if (circle) {
-				if (spaces[wins[i][0]] == "X" && spaces[wins[i][1]] == "X" && spaces[wins[i][2]] == "X") {
+				if (spaces[wins[i][0]] == "X" && spaces[wins[i][1]] == "X" && spaces[wins[i][2]] == "X") 
+				{
 					firstSpot = wins[i][0];
 					secondSpot = wins[i][2];
 					enemyWon = true;
 				}
-			} else {
-				if (spaces[wins[i][0]] == "O" && spaces[wins[i][1]] == "O" && spaces[wins[i][2]] == "O") {
+			} 
+			else 
+			{
+				if (spaces[wins[i][0]] == "O" && spaces[wins[i][1]] == "O" && spaces[wins[i][2]] == "O") 
+				{
 					firstSpot = wins[i][0];
 					secondSpot = wins[i][2];
 					enemyWon = true;
@@ -234,47 +273,59 @@ public class TicTacToe implements Runnable {
 	}
 
 
-	private boolean connect() {
+	private boolean connect() 
+	{
 		try {
 			socket = new Socket(ip, port);
 			dos = new DataOutputStream(socket.getOutputStream());
 			dis = new DataInputStream(socket.getInputStream());
 			accepted = true;
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			return false;
 		}
 		return true;
 	}
 	
-	private void listenForServerRequest() {
+	private void listenForServerRequest()
+	{
 		Socket socket = null;
-		try {
+		try 
+		{
 			socket = serverSocket.accept();
 			dos = new DataOutputStream(socket.getOutputStream());
 			dis = new DataInputStream(socket.getInputStream());
 			accepted = true;
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 	}
-	
 	}
 
 	// Loads pngs from resource folder
-	private void loadImages() {
-		try {
+	private void loadImages() 
+	{
+		try 
+		{
 			board = ImageIO.read(getClass().getResourceAsStream("/board.png"));
 			X = ImageIO.read(getClass().getResourceAsStream("/X.png"));
 			O = ImageIO.read(getClass().getResourceAsStream("/O.png"));
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 	}
-
 	private void initializeServer() {
-		try {
+		try 
+		{
 			serverSocket = new ServerSocket(port, 8, InetAddress.getByName(ip));
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+			{
 			e.printStackTrace();
 		}
 		yourTurn = true;
@@ -282,20 +333,21 @@ public class TicTacToe implements Runnable {
 
 	
 	@SuppressWarnings("unused")
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		TicTacToe ticTacToe = new TicTacToe();
 	}
-
-	private class Painter extends JPanel implements MouseListener {
+	private class Painter extends JPanel implements MouseListener
+		{
 		private static final long serialVersionUID = 1L;
 
-		public Painter() {
+		public Painter() 
+		{
 			setFocusable(true);
 			requestFocus();
 			setBackground(Color.WHITE);
 			addMouseListener(this);
 		}
-
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -303,58 +355,53 @@ public class TicTacToe implements Runnable {
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
-			if (accepted) {
+		public void mouseClicked(MouseEvent e) 
+		{
+			if (accepted)
+			{
 				if (yourTurn && !unableToCommunicateWithOpponent && !won && !enemyWon) {
 					int x = e.getX() / lengthOfSpace;
 					int y = e.getY() / lengthOfSpace;
 					y *= 3;
 					int position = x + y;
 
-					if (spaces[position] == null) {
+					if (spaces[position] == null)
+					{
 						if (!circle) spaces[position] = "X";
 						else spaces[position] = "O";
 						yourTurn = false;
 						repaint();
 						Toolkit.getDefaultToolkit().sync();
 
-						try {
+						try 
+							{
 							dos.writeInt(position);
 							dos.flush();
-						} catch (IOException e1) {
+						} 
+						catch (IOException e1)
+						{
 							errors++;
 							e1.printStackTrace();
 						}
-
 						System.out.println("DATA SENT");
 						checkForWin();
 						checkForTie();
-
 					}
 				}
 			}
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
-
-		}
-
+		public void mousePressed(MouseEvent e)
+		{}
 		@Override
-		public void mouseReleased(MouseEvent e) {
-
-		}
-
+		public void mouseReleased(MouseEvent e)
+		{}
 		@Override
-		public void mouseEntered(MouseEvent e) {
-
-		}
-
+		public void mouseEntered(MouseEvent e)
+		{}
 		@Override
-		public void mouseExited(MouseEvent e) {
-
-		}
-
+		public void mouseExited(MouseEvent e)
+		{}
 	}
-
 }
