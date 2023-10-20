@@ -60,7 +60,6 @@ public class TicTacToe implements Runnable {
 	private boolean won = false;
 	private boolean enemyWon = false;
 	private boolean tie = false;
-
 	private int lengthOfSpace = 160;
 	private int errors = 0;
 	private int firstSpot = -1;
@@ -164,7 +163,6 @@ public class TicTacToe implements Runnable {
 				g.drawString(tieString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
 			}
 		} else {
-			g.setColor(Color.RED);
 			g.setFont(font);
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -188,6 +186,15 @@ public class TicTacToe implements Runnable {
 				errors++;
 			}
 		}
+	}
+
+	private void checkForTie() {
+		for (int i = 0; i < spaces.length; i++) {
+			if (spaces[i] == null) {
+				return;
+			}
+		}
+		tie = true;
 	}
 
 	private void checkForWin() {
@@ -226,14 +233,16 @@ public class TicTacToe implements Runnable {
 		}
 	}
 
-	private void checkForTie() {
-		for (int i = 0; i < spaces.length; i++) {
-			if (spaces[i] == null) {
-				return;
-			}
+	
+
+	private void initializeServer() {
+		try {
+			serverSocket = new ServerSocket(port, 8, InetAddress.getByName(ip));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		tie = true;
-	}
+		yourTurn = true;
+		circle = false;
 
 	private void listenForServerRequest() {
 		Socket socket = null;
@@ -259,14 +268,7 @@ public class TicTacToe implements Runnable {
 		return true;
 	}
 
-	private void initializeServer() {
-		try {
-			serverSocket = new ServerSocket(port, 8, InetAddress.getByName(ip));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		yourTurn = true;
-		circle = false;
+	
 	}
 
 	// Loads pngs from resource folder
