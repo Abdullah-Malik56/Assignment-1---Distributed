@@ -233,28 +233,6 @@ public class TicTacToe implements Runnable {
 		}
 	}
 
-	
-
-	private void initializeServer() {
-		try {
-			serverSocket = new ServerSocket(port, 8, InetAddress.getByName(ip));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		yourTurn = true;
-		circle = false;
-
-	private void listenForServerRequest() {
-		Socket socket = null;
-		try {
-			socket = serverSocket.accept();
-			dos = new DataOutputStream(socket.getOutputStream());
-			dis = new DataInputStream(socket.getInputStream());
-			accepted = true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	private boolean connect() {
 		try {
@@ -267,7 +245,18 @@ public class TicTacToe implements Runnable {
 		}
 		return true;
 	}
-
+	
+	private void listenForServerRequest() {
+		Socket socket = null;
+		try {
+			socket = serverSocket.accept();
+			dos = new DataOutputStream(socket.getOutputStream());
+			dis = new DataInputStream(socket.getInputStream());
+			accepted = true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	}
 
@@ -282,6 +271,16 @@ public class TicTacToe implements Runnable {
 		}
 	}
 
+	private void initializeServer() {
+		try {
+			serverSocket = new ServerSocket(port, 8, InetAddress.getByName(ip));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		yourTurn = true;
+		circle = false;
+
+	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		TicTacToe ticTacToe = new TicTacToe();
